@@ -19,6 +19,7 @@ import java.util.List;
 
 public class MovieAdapter extends
         RecyclerView.Adapter<MovieAdapter.ViewHolder> {
+    CustomItemClickInterface clickListener;
 
     //String LOG_TAG =
 
@@ -33,6 +34,10 @@ public class MovieAdapter extends
         //mMovieData = movieData;
         mContext = context;
         this.mMovieData = list;
+    }
+
+    public interface CustomItemClickInterface {
+        public void onItemClick(View view, int itemClicked);
     }
 
     @Override
@@ -50,14 +55,10 @@ public class MovieAdapter extends
         Log.i("createViewhOlderCount", countOnCreateViewHolder + "");
         return viewHolder;
     }
-//if(sort criteria is popular) {
-//        // url = BASE_URL + "popular";
-//    }else if(sort criteria is top_rated){
-//        // url = BASE_URL + "top_rated";
-//    }
-//
-// url.appendQueryParameter(QUERY_API_KEY, YOUR_API_KEY)
 
+    public void setClickListener(CustomItemClickInterface itemClickListener) {
+        this.clickListener = itemClickListener;
+    }
 
     @Override
     public void onBindViewHolder(MovieAdapter.ViewHolder holder, int position) {
@@ -82,18 +83,25 @@ public class MovieAdapter extends
 
     // Provide a direct reference to each of the views within a data item
     // Used to cache the views within the item layout for fast access
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         // Your holder should contain a member variable
         // for any view that will be set as you render a row
         public ImageView posterImageView;
 
-
-        // We also create a constructor that accepts the entire item row
+        //  constructor that accepts the entire item row
         // and does the view lookups to find each subview
         public ViewHolder(View itemView) {
             super(itemView);
-
             posterImageView = (ImageView) itemView.findViewById(R.id.poster_image);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (clickListener != null) {
+                clickListener.onItemClick(v, getAdapterPosition());
+            }
+
         }
     }
 

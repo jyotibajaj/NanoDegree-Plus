@@ -7,7 +7,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
+import android.view.View;
 
 import java.io.IOException;
 import java.net.URL;
@@ -16,9 +16,10 @@ import java.util.ArrayList;
 import static letsdecode.com.popularmovies.NetworkUtils.buildPopularMovies;
 import static letsdecode.com.popularmovies.NetworkUtils.buildTopRated;
 
-public class MoviesGridActivity extends AppCompatActivity {
+public class MoviesGridActivity extends AppCompatActivity implements MovieAdapter.CustomItemClickInterface {
 
-    ArrayList<MovieData> movieDatas = new ArrayList<>();
+    //arraylist storing the data of the app.
+    ArrayList<MovieData> movieDatas = new ArrayList<MovieData>();
     MovieAdapter mMovieAdapter;
 
 
@@ -26,15 +27,22 @@ public class MoviesGridActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movies_grid);
-        // Lookup the recyclerview in activity layout
+
+        //calling async task
         new MoviesQueryTask().execute(buildTopRated());
+
+        // Lookup the recyclerview in activity layout
         RecyclerView rvMovies = (RecyclerView) findViewById(R.id.rvContacts);
-        ItemOffSetDecoration itemDecoration = new ItemOffSetDecoration(getApplicationContext(), R.dimen.item_offset);
-        rvMovies.addItemDecoration(itemDecoration);
+//        ItemOffSetDecoration itemDecoration = new ItemOffSetDecoration(getApplicationContext(), R.dimen.item_offset);
+//        rvMovies.addItemDecoration(itemDecoration);
         // Set layout manager to position the items
         rvMovies.setLayoutManager(new GridLayoutManager(this, 2));
         //initialize the adapter
         mMovieAdapter = new MovieAdapter(this, movieDatas);
+        // bind the listener
+        mMovieAdapter.setClickListener(this);
+
+//
         // Attach the adapter to the recyclerview to populate items
         rvMovies.setAdapter(mMovieAdapter);
 
@@ -52,38 +60,23 @@ public class MoviesGridActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemThatWasClicked = item.getItemId();
         if (itemThatWasClicked == R.id.popular) {
-            //Toast.makeText(getApplicationContext(), "popular item is clicked", Toast.LENGTH_SHORT).show();
             new MoviesQueryTask().execute(buildPopularMovies());
 
-//            buildPopularMovies();
-        }
-
-        else if(itemThatWasClicked == R.id.top_rated) {
-            Toast.makeText(getApplicationContext(), "top rated item is clicked", Toast.LENGTH_SHORT).show();
+        } else if (itemThatWasClicked == R.id.top_rated) {
             new MoviesQueryTask().execute(buildTopRated());
         }
-//        //rating
-//        Collections.sort(movieDatas, new Comparator<MovieData>() {
-//            @Override
-//            public int compare(MovieData o1, MovieData o2) {
-//                return o1.getVoteCount()  - o2.getVoteCount();
-//            }
-//        });
-
-
-//        //Polularity
-//        Collections.sort(movieDatas, new Comparator<MovieData>() {
-//            @Override
-//            public int compare(MovieData o1, MovieData o2) {
-//                return o1.getPopularity()  - o2.getPopularity();
-//            }
-//        });
         mMovieAdapter.notifyDataSetChanged();
 
         return super.onOptionsItemSelected(item);
 
     }
 
+    @Override
+    public void onItemClick(View view, int itemClicked) {
+        MovieData item = movieDatas.get(itemClicked);
+        //creating intent and adding data to transfer.
+        startActivity(DetailActivity.createIntent(this, item));
+    }
 
 
     public class MoviesQueryTask extends AsyncTask<URL, Void, ArrayList<MovieData>> {
