@@ -55,6 +55,10 @@ public class MovieData implements Parcelable {
     }
 
 
+    public String getMoviePosterUrlw300() {
+        return BASE_URL + "w300" + imageUrl;
+    }
+
     @Override
     public int describeContents() {
         return 0;

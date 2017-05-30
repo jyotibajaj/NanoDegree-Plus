@@ -21,7 +21,6 @@ public class MovieAdapter extends
         RecyclerView.Adapter<MovieAdapter.ViewHolder> {
     CustomItemClickInterface clickListener;
 
-    //String LOG_TAG =
 
     // Store a member variable for the contacts
     private List<MovieData> mMovieData;
@@ -29,9 +28,7 @@ public class MovieAdapter extends
     private Context mContext;
     private int countOnCreateViewHolder = 0;
 
-    // Pass in the contact array into the constructor
     public MovieAdapter(Context context, List<MovieData> list) {
-        //mMovieData = movieData;
         mContext = context;
         this.mMovieData = list;
     }
@@ -104,6 +101,8 @@ public class MovieAdapter extends
 
         }
     }
-
-
 }
+
+
+
+
