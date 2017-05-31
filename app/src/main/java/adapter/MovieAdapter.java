@@ -1,20 +1,24 @@
-package letsdecode.com.popularmovies;
+package adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import data.MovieData;
+import letsdecode.com.popularmovies.R;
+
 /**
- * Created by aashi on 13/05/17.
+ * Created by jyoti on 13/05/17.
+ * adapter
  */
 
 public class MovieAdapter extends
@@ -22,7 +26,6 @@ public class MovieAdapter extends
     CustomItemClickInterface clickListener;
 
 
-    // Store a member variable for the contacts
     private List<MovieData> mMovieData;
     // Store the context for easy access
     private Context mContext;
@@ -33,13 +36,14 @@ public class MovieAdapter extends
         this.mMovieData = list;
     }
 
+    //interface for item click on recycler view
     public interface CustomItemClickInterface {
-        public void onItemClick(View view, int itemClicked);
+        void onItemClick(View view, int itemClicked);
     }
 
     @Override
     public MovieAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        // Usually involves inflating a layout from XML and returning the holder
+        // inflate a layout from XML and returning the holder
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
@@ -48,15 +52,16 @@ public class MovieAdapter extends
 
         // Return a new holder instance
         ViewHolder viewHolder = new ViewHolder(movieView);
-        countOnCreateViewHolder++;
-        Log.i("createViewhOlderCount", countOnCreateViewHolder + "");
         return viewHolder;
     }
 
-    public void setClickListener(CustomItemClickInterface itemClickListener) {
-        this.clickListener = itemClickListener;
-    }
 
+    /**
+     * This method binds the data with adapter.
+     *
+     * @param holder   ViewHolder object.
+     * @param position gives current position of the data..
+     */
     @Override
     public void onBindViewHolder(MovieAdapter.ViewHolder holder, int position) {
         // Involves populating data into the item through holder
@@ -66,12 +71,28 @@ public class MovieAdapter extends
 
     }
 
+
     @Override
     public int getItemCount() {
         if (null == mMovieData) return 0;
         return mMovieData.size();
     }
 
+    /**
+     * This method sets the CustomItemClickInterface to the current object.
+     *
+     * @param itemClickListener
+     */
+    public void setClickListener(CustomItemClickInterface itemClickListener) {
+        this.clickListener = itemClickListener;
+    }
+
+
+    /**
+     * This method sets movie data into arraylist.
+     *
+     * @param movieData
+     */
     public void setMovieData(ArrayList<MovieData> movieData) {
         mMovieData.clear();
         mMovieData.addAll(movieData);
@@ -84,6 +105,8 @@ public class MovieAdapter extends
         // Your holder should contain a member variable
         // for any view that will be set as you render a row
         public ImageView posterImageView;
+        public TextView internetStatus_textView;
+
 
         //  constructor that accepts the entire item row
         // and does the view lookups to find each subview
@@ -100,7 +123,11 @@ public class MovieAdapter extends
             }
 
         }
+
+
+
     }
+
 }
 
 

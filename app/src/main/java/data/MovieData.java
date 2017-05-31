@@ -1,11 +1,8 @@
-package letsdecode.com.popularmovies;
+package data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Created by aashi on 13/05/17.
- */
 
 public class MovieData implements Parcelable {
     public static final String BASE_URL = "http://image.tmdb.org/t/p/";
@@ -16,8 +13,6 @@ public class MovieData implements Parcelable {
     private double vote_average;
     private String overview;
     private int id;
-
-    // private int voteCount;
 
 
     public int getId() {
