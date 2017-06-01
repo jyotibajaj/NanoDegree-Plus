@@ -1,4 +1,4 @@
-package letsdecode.com.popularmovies;
+package utilities;
 
 import android.net.Uri;
 import android.util.Log;
@@ -15,9 +15,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-/**
- * Created by aashi on 14/05/17.
- */
+import data.MovieData;
+
 
 public class NetworkUtils {
     final static String BASE_URL = "https://api.themoviedb.org/";
@@ -51,7 +50,8 @@ public class NetworkUtils {
     }
 
     /**
-     * This method build the url for fetching movie data sorted for popularity */
+     * This method build the url for fetching movie data sorted for popularity
+     */
     public static URL buildPopularMovies() {
         Uri.Builder builder = createUrlBuilder(END_POINT_POPULAR);
         return buildUrl(builder);
@@ -59,7 +59,8 @@ public class NetworkUtils {
     }
 
     /**
-     * This method build the url for fetching movie data as per rating */
+     * This method build the url for fetching movie data as per rating
+     */
     public static URL buildTopRated() {
         Uri.Builder builder = createUrlBuilder(END_POINT_TOP_RATED);
         return buildUrl(builder);
@@ -73,7 +74,7 @@ public class NetworkUtils {
      * @return The contents of the HTTP response.
      * @throws IOException Related to network and stream reading
      */
-    public static ArrayList<MovieData> getResponseFromHttpUrl(URL url) throws IOException {
+    public static ArrayList<MovieData> getResponseFromHttpUrl(URL url) throws IOException, JSONException {
         ArrayList<MovieData> list = new ArrayList<>();
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         try {
@@ -112,9 +113,7 @@ public class NetworkUtils {
      * @throws JSONException Related to json parsing
      */
 
-    public static ArrayList<MovieData> parseNetworkResponse(ArrayList<MovieData> list, Scanner scanner) {
-
-        try {
+    public static ArrayList<MovieData> parseNetworkResponse(ArrayList<MovieData> list, Scanner scanner) throws JSONException {
 
             JSONObject movieJSON = new JSONObject(scanner.next());
             JSONArray resultsArray = movieJSON.getJSONArray("results");
@@ -129,9 +128,8 @@ public class NetworkUtils {
                 int id = arrayObject.getInt("id");
                 list.add(new MovieData(posterPath, release_date, title, vote_average, overview, id));
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
         return list;
     }
+
+
 }

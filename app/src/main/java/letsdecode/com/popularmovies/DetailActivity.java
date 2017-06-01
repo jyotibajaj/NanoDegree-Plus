@@ -3,16 +3,26 @@ package letsdecode.com.popularmovies;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-public class DetailActivity extends AppCompatActivity {
+import data.MovieData;
+
+public class DetailActivity extends BaseActivity {
+
 
     public static final String MOVIE_DATA_KEY = "movieDataKey";
 
+    /**
+     * This method returns the entire result from the HTTP response.
+     *
+     * @param activity the caller activity.
+     * @param movieData object of movie data.
+     * @return intent.
+     */
     public static Intent createIntent(Activity activity, final MovieData movieData) {
         Intent i = new Intent(activity, DetailActivity.class);
         i.putExtra(DetailActivity.MOVIE_DATA_KEY, movieData);
@@ -42,10 +52,28 @@ public class DetailActivity extends AppCompatActivity {
         dateTextView.setText(movieData.getRelease_date());
         titleTextView.setText(movieData.getTitle());
         String voteAverage = movieData.getVote_average() + "";
-        voteTextView.setText(voteAverage);
+        voteTextView.setText(voteAverage + "/10");
         overviewTextView.setText(movieData.getOverview());
-        Picasso.with(getApplicationContext()).load(movieData.getMoviePosterUrl()).into(tv_PosterImageView);
+        Picasso.with(getApplicationContext()).load(movieData.getMoviePosterUrlw300()).into(tv_PosterImageView);
+
+
+        //enabling back button
+       getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
 
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    protected void onNetworkChanged() {
+
+    }
+
+
 }

@@ -13,4 +13,5 @@
         app:showAsAction="never"
         android:title="@string/top_rated"/>
 
+
 </menu>

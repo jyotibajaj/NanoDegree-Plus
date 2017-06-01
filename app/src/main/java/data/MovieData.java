@@ -7,6 +7,7 @@ import android.os.Parcelable;
 public class MovieData implements Parcelable {
     public static final String BASE_URL = "http://image.tmdb.org/t/p/";
 
+
     private String imageUrl;
     private String title;
     private String release_date;
